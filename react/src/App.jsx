@@ -1,6 +1,7 @@
 import './App.css';
 import { Routes, Route } from 'react-router-dom';
 import Dashboard from 'pages/dashboard';
+import Manage from 'pages/manage';
 import Login from 'pages/login';
 import Register from 'pages/register';
 import Home from 'pages/home';
@@ -18,6 +19,7 @@ function App() {
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/password-reset/:token" element={<PasswordReset />} />
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/manage" element={<Manage />} />
         <Route path="*" element={<NotFoundPage/>}
         />
       </Routes>

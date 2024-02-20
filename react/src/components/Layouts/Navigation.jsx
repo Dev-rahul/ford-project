@@ -30,6 +30,11 @@ const Navigation = ({ user }) => {
               >
                 Dashboard
               </CustomNavLink>
+              <CustomNavLink
+                to="/manage"
+              >
+                Manage
+              </CustomNavLink>
             </div>
           </div>
           {/* Settings Dropdown */}
