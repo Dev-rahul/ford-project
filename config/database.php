@@ -15,8 +15,8 @@ return [
     |
     */
 
-    'default' => env('DB_CONNECTION', 'mysql'),
-
+    // 'default' => env('DB_CONNECTION', 'mysql'),
+    'default' => env('DB_CONNECTION', 'mongodb'),
     /*
     |--------------------------------------------------------------------------
     | Database Connections
@@ -32,8 +32,15 @@ return [
     | choice installed on your machine before you begin development.
     |
     */
+    // 8caHOmNZViE5Poab
 
     'connections' => [
+
+        'mongodb' => [
+            'driver' => 'mongodb',
+            'dsn' => env('DB_URI', 'mongodb+srv://user:test123@fordcluster0.c7qfx7r.mongodb.net/?retryWrites=true&w=majority&appName=FordCluster0'),
+            'database' => 'FordCluster0',
+          ],
 
         'sqlite' => [
             'driver' => 'sqlite',
@@ -62,6 +69,7 @@ return [
                 PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
             ]) : [],
         ],
+        
 
         'pgsql' => [
             'driver' => 'pgsql',
