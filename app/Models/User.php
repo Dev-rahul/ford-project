@@ -21,8 +21,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'isAdmin'
     ];
-    protected $connection = 'mongodb';
 
     /**
      * The attributes that should be hidden for serialization.
