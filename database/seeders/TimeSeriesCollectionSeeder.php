@@ -5,7 +5,10 @@ namespace Database\Seeders;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\TimeSeries;
-use Rap2hpoutre\FastExcel\FastExcel;
+//use Rap2hpoutre\FastExcel\FastExcel;
+//use Maatwebsite\Excel\Facades\Excel;
+//use App\Imports\TimeSeriesImport;
+
 
 
 
@@ -23,11 +26,14 @@ class TimeSeriesCollectionSeeder extends Seeder
         $timeSeriesData->save();
 
 
-        $timeSeriesData = (new FastExcel)->import('995.xlsx', function ($line) {
-            return TimeSeries::create([
-                'x' => $line['Name'],
-                'y' => $line['Email']
-            ]);
-        });
+        //Excel::import(new TimeSeriesImport, '995.xlsx');
+
+        // $timeSeriesData = (new FastExcel)->import('995.xlsx', function ($line) {
+            
+        //     $model  = new TimeSeries();
+        //     $model->x = $line[1] ; // Increment value before assigning
+        //     $model->y = $line[2]; // Assign 'y' from the third row
+        //     $model->save();
+        // });
     }
 }
