@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Rap2hpoutre\FastExcel\FastExcel;
 use App\Models\TimeSeries;
+use Spatie\SimpleExcel\SimpleExcelReader;
 
 
 class ExcelController extends Controller
@@ -79,22 +80,46 @@ class ExcelController extends Controller
             
             $myExcel = $request->file('file');
             $rowData = [];
+            $collection = (new FastExcel)->import($myExcel);
+            // $columnNames = (new FastExcel)->import($myExcel)->headerRow();
 
-            // Parse and store data from the uploaded Excel file
-            (new FastExcel)->sheet(1)->import($myExcel, function ($line) use (&$rowData) {
-                // Collect each row's data into the $rowData array
-                $rowArray = [];
 
-                foreach ($line as $item) {
-                    // Add each item to the row array
-                    array_push( $rowArray, $item);
-                }
-                $rowData[] = [
-                    'x' => $rowArray, // Assuming 'x' is in the second column
-                    'y' => 'ds', // Assuming 'y' is in the third column
-                    // Add more fields as needed
-                ];
-            });
+        //     $rows = SimpleExcelReader::create($myExcel)
+        //     ->noHeaderRow()
+        //     ->getRows()
+        //     ->each(function(array $rowProperties) {
+        //         array_push( $rowArray, $rowProperties);
+
+                
+        // });
+      //  $rows = SimpleExcelReader::create('https://filesamples.com/samples/document/xlsx/sample2.xlsx')->getRows();
+
+
+
+
+    //     $flag = false;
+    //     $firstRow = [];
+    //   (new FastExcel)->sheet(1)->import($myExcel, function ($line) use (&$rowData, &$flag , &$firstRow) {
+    //     // Collect each row's data into the $rowData array
+    //     $rowArray = [];
+    //     if($flag == false) {
+    //         foreach ($line as $item) {
+    //             array_push( $firstRow, $item);
+    //         }
+    //         $flag = true;
+    //     }
+       
+
+    //     foreach ($line as $item) {
+    //         // Add each item to the row array
+    //         array_push( $rowArray, $item);
+    //     }
+    //     $rowData[] = [
+    //         'x' => [1,2,3],
+    //         'y' => $rowArray, // Assuming 'x' is in the second column
+            
+    //     ];
+    // });
 
             //$collection = (new FastExcel)->import($request->file('file'));
 
@@ -115,7 +140,7 @@ class ExcelController extends Controller
             // For example:
             // $file = File::create(['path' => $path, 'user_id' => auth()->id()]);
 
-            return response()->json(['message' => 'File uploaded successfully', 'path' => $rowData], 200);
+            return response()->json(['message' => 'File uploaded successfully', 'path' => $collection], 200);
         } else {
             return response()->json(['message' => 'Invalid file'], 400);
         }
