@@ -79,8 +79,29 @@ class ExcelController extends Controller
 
             
             $myExcel = $request->file('file');
-            $rowData = [];
             $collection = (new FastExcel)->import($myExcel);
+
+
+
+            $chunkSize = 100; // Adjust as needed
+
+            // Chunk the collection and process each chunk
+            $collection->chunk($chunkSize)->each(function ($chunk) {
+                $models = [];
+            
+                // Process each chunk of data
+                foreach ($chunk as $index => $data) {
+                    $timeSeriesData = new TimeSeries();
+                    $timeSeriesData->x = $index;
+                    $timeSeriesData->y = $data;
+                    $timeSeriesData->status = 'unmarked';
+                    $models[] = $timeSeriesData->toArray(); // Convert model instance to array
+                }
+            
+                // Insert the chunk of data into the database
+                TimeSeries::insert($models);
+            });
+
             // $columnNames = (new FastExcel)->import($myExcel)->headerRow();
 
 
@@ -140,7 +161,7 @@ class ExcelController extends Controller
             // For example:
             // $file = File::create(['path' => $path, 'user_id' => auth()->id()]);
 
-            return response()->json(['message' => 'File uploaded successfully', 'path' => $collection], 200);
+            return response()->json(['message' => 'Data imported successfully'], 200);
         } else {
             return response()->json(['message' => 'Invalid file'], 400);
         }
