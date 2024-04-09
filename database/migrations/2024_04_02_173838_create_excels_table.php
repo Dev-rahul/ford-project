@@ -11,18 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('time_series', function (Blueprint $collection) {
+        Schema::create('excels', function (Blueprint $collection) {
             $collection->id();
             $collection->timestamps();
-            $collection->unsignedInteger('x');
-            $collection->index('y');
-            $collection->string('status')->default('unmarked');
+            $collection->string('name');
             $collection->unsignedInteger('user0')->nullable();
             $collection->unsignedInteger('user1')->nullable();
             $collection->unsignedInteger('user2')->nullable();
-            $collection->unsignedBigInteger('excel_id');
-            $collection->foreign('excel_id')->references('id')->on('excels');
-
+            // $collection->string('file_name');
         });
     }
 
@@ -31,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('time_series');
+        Schema::dropIfExists('excels');
     }
 };

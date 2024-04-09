@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Rap2hpoutre\FastExcel\FastExcel;
 use App\Models\TimeSeries;
+use App\Models\Excel;
 use Spatie\SimpleExcel\SimpleExcelReader;
 
 
@@ -77,16 +78,21 @@ class ExcelController extends Controller
         if ($request->file('file')->isValid()) {
             // Store the uploaded file
 
-            
             $myExcel = $request->file('file');
+
+            $excelData = new Excel();
+            //$excelData->name = pathinfo($myExcel, PATHINFO_FILENAME);
+            $excelData->name =   $myExcel->getClientOriginalName();
+            $excelData->save();
+            
             $collection = (new FastExcel)->import($myExcel);
 
 
 
-            $chunkSize = 100; // Adjust as needed
+            $chunkSize = 1000; // Adjust as needed
 
             // Chunk the collection and process each chunk
-            $collection->chunk($chunkSize)->each(function ($chunk) {
+            $collection->chunk($chunkSize)->each(function ($chunk) use ($excelData) {
                 $models = [];
             
                 // Process each chunk of data
@@ -95,11 +101,13 @@ class ExcelController extends Controller
                     $timeSeriesData->x = $index;
                     $timeSeriesData->y = $data;
                     $timeSeriesData->status = 'unmarked';
+                    $timeSeriesData->excel_id = $excelData->id;
                     $models[] = $timeSeriesData->toArray(); // Convert model instance to array
                 }
             
                 // Insert the chunk of data into the database
-                TimeSeries::insert($models);
+                //TimeSeries::insert($models);
+                $excelData->timeSeries()->insert($models);
             });
 
             // $columnNames = (new FastExcel)->import($myExcel)->headerRow();
@@ -167,12 +175,13 @@ class ExcelController extends Controller
         }
     }
 
-    public function getData($collectionName)
+    public function getData()
     {
         // Fetch the data from the specified collection
-        $data = DB::connection('mongodb')->collection($collectionName)->get();
+        $timeSeriesData = TimeSeries::where('excel_id', '6615899ca4933f5bfd010b03')->get();
+
 
         // Return the data as JSON
-        return response()->json($data);
+        return response()->json($timeSeriesData);
     }
 }

@@ -8,4 +8,11 @@ use MongoDB\Laravel\Eloquent\Model;
 class TimeSeries extends Model
 {
     use HasFactory;
+    protected $fillable = ['x', 'y', 'status', 'excel_id'];
+
+
+    public function excel()
+    {
+        return $this->belongsTo(Excel::class);
+    }
 }
