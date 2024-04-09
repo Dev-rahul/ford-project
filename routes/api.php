@@ -15,9 +15,10 @@ use App\Http\Controllers\ExcelController;
 |
 */
 
-Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
-    return $request->user();
-});
+Route::middleware(['auth:sanctum'])->get('/data/{collectionName}', [ExcelController::class, 'getData']);
 
 Route::middleware(['auth:sanctum'])->post('/upload-excel', [ExcelController::class, 'upload']);
 
+Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
+    return $request->user();
+});

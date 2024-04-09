@@ -145,4 +145,13 @@ class ExcelController extends Controller
             return response()->json(['message' => 'Invalid file'], 400);
         }
     }
+
+    public function getData($collectionName)
+    {
+        // Fetch the data from the specified collection
+        $data = DB::connection('mongodb')->collection($collectionName)->get();
+
+        // Return the data as JSON
+        return response()->json($data);
+    }
 }
