@@ -178,10 +178,33 @@ class ExcelController extends Controller
     public function getData()
     {
         // Fetch the data from the specified collection
-        $timeSeriesData = TimeSeries::where('excel_id', '6615899ca4933f5bfd010b03')->get();
+        $measurements = TimeSeries::where('excel_id', '6617ee12a4933f5bfd011e8d')->get();
+        $lastIndex = 0;
+
+        $transformedData = [];
+
+        // Determine the maximum number of time points
+        $maxTimePoints = $measurements->max(function ($measurement) {
+            return count($measurement['y']);
+        });
 
 
+        // Initialize structure for each time point
+        for ($i = 0; $i < $maxTimePoints; $i++) {
+            $transformedData[$i] = ['time' => $i];
+        }
+
+        // Populate the data for each time point from each measurement
+        foreach ($measurements as $measurement) {
+            if($measurement['status'] != 'unmarked') {
+                $lastIndex++;
+            }
+            foreach ($measurement['y'] as $index => $value) {
+                // Assuming 'x' represents a unique identifier for each measurement and is a string
+                $transformedData[$index][$measurement['x']] = $value;
+            }
+        }
         // Return the data as JSON
-        return response()->json($timeSeriesData);
+        return response()->json(['data' => $transformedData, 'lastMarkedIndex' => $lastIndex]);
     }
 }
