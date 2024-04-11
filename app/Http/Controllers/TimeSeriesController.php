@@ -66,7 +66,7 @@ class TimeSeriesController extends Controller
                   }
               }
               // Return the data as JSON
-              return response()->json(['data' => $transformedData, 'lastMarkedIndex' => $lastIndex]);
+              return response()->json(['data' => $measurements, 'lastMarkedIndex' => $lastIndex]);
 
 
     }
