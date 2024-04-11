@@ -39,7 +39,7 @@ class TimeSeriesController extends Controller
     {
 
               // Fetch the data from the specified collection
-              $measurements = TimeSeries::where('excel_id', '6617ee12a4933f5bfd011e8d')->get();
+              $measurements = TimeSeries::where('excel_id', $id)->get();
               $lastIndex = 0;
       
               $transformedData = [];

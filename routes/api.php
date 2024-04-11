@@ -14,6 +14,7 @@ use App\Http\Controllers\ExcelController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+Route::middleware(['auth:sanctum'])->get('/getTimeseriesData/{file_name}', [TimeSeriesController::class, 'show']);
 
 Route::middleware(['auth:sanctum'])->get('/getData', [ExcelController::class, 'getData']);
 
