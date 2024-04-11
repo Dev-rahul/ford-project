@@ -7,7 +7,7 @@ const MyResponsiveLine = () => {
 
  // const [data, setData] = useState(null)
   const [seriesData, setSeriesData] = useState(null);
-
+  const [lastMarkedItem, setLastMarkedItem] = useState(0);
 
 
   const fetchData = async () => {
@@ -16,6 +16,7 @@ const MyResponsiveLine = () => {
       let graphData =  response.data.data;
       console.log("data", graphData)
       //setData(graphData)
+      setLastMarkedItem(response.data.lastMarkedIndex)
       formatSeriesData(5000,response.data.lastMarkedIndex,graphData)
     } catch (error) {
       console.error('Error uploading file:', error);
@@ -23,22 +24,34 @@ const MyResponsiveLine = () => {
   };
 
 
-
-  const formatSeriesData = (count, lastMarkedIndex,graphData) => {
+  const moveToNext = () => {
+    setLastMarkedItem( prev=> prev+1)
     let array = []
+    let tempItemp = {}
     for(let i=0; i<=count; i++) {
-      if(lastMarkedIndex ===i) {
-        array.push({
+      if(lastMarkedItem ===i) {
+        tempItemp = {
           type: "line",
           xKey: "time",
           yKey: i.toString(),
           yName: i.toString(),
           stroke: "orange",
-          strokeWidth: 10,
+          strokeWidth: 1,
           marker: {
-            enabled: true,
+            enabled: false,
           },
-        })
+        }
+        // array.push({
+        //   type: "line",
+        //   xKey: "time",
+        //   yKey: i.toString(),
+        //   yName: i.toString(),
+        //   stroke: "orange",
+        //   strokeWidth: 10,
+        //   marker: {
+        //     enabled: true,
+        //   },
+        // })
       } else {
         array.push({
           type: "line",
@@ -58,6 +71,60 @@ const MyResponsiveLine = () => {
       }
 
     }
+    array.push(tempItemp)
+    setOptions(prev=> prev.series = array);
+
+  }
+
+
+
+  const formatSeriesData = (count, lastMarkedIndex,graphData) => {
+    let array = []
+    let tempItemp = {}
+    for(let i=0; i<=count; i++) {
+      if(lastMarkedIndex ===i) {
+        tempItemp = {
+          type: "line",
+          xKey: "time",
+          yKey: i.toString(),
+          yName: i.toString(),
+          stroke: "orange",
+          strokeWidth: 1,
+          marker: {
+            enabled: false,
+          },
+        }
+        // array.push({
+        //   type: "line",
+        //   xKey: "time",
+        //   yKey: i.toString(),
+        //   yName: i.toString(),
+        //   stroke: "orange",
+        //   strokeWidth: 10,
+        //   marker: {
+        //     enabled: true,
+        //   },
+        // })
+      } else {
+        array.push({
+          type: "line",
+          xKey: "time",
+          yKey: i.toString(),
+          yName: i.toString(),
+          strokeWidth: .5,
+          strokeOpacity: .2,
+          stroke: "#808080",
+          marker: {
+            enabled: false,
+            size: 2,
+            
+
+          },
+        })
+      }
+
+    }
+    array.push(tempItemp)
     console.log('setSeriesData', array)
     setSeriesData(array)
     let newOptions = {
@@ -104,7 +171,7 @@ const MyResponsiveLine = () => {
                 <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                     ANC
                 </button>
-                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                < button onClick={moveToNext} class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                     REHIT
                 </button>
 
