@@ -1,12 +1,13 @@
 import React, {  useState, useEffect } from "react";
 import { AgChartsReact } from 'ag-charts-react';
 import axios from "lib/axios";
+import {XYPlot, LineSeries, } from 'react-vis';
 
 
 const MyResponsiveLine = () => {
 
- // const [data, setData] = useState(null)
-  const [seriesData, setSeriesData] = useState(null);
+  const [data, setData] = useState([])
+  const [seriesData, setSeriesData] = useState([]);
   const [lastMarkedItem, setLastMarkedItem] = useState(0);
 
 
@@ -15,7 +16,7 @@ const MyResponsiveLine = () => {
       const response = await axios.get('/api/getTimeSeriesData/6617ee12a4933f5bfd011e8d');
       let graphData =  response.data.data;
       console.log("data", graphData)
-      //setData(graphData)
+      setData(graphData)
       setLastMarkedItem(response.data.lastMarkedIndex)
       formatSeriesData(5000,response.data.lastMarkedIndex,graphData)
     } catch (error) {
@@ -28,7 +29,7 @@ const MyResponsiveLine = () => {
     setLastMarkedItem( prev=> prev+1)
     let array = []
     let tempItemp = {}
-    for(let i=0; i<=count; i++) {
+    for(let i=0; i<=5000; i++) {
       if(lastMarkedItem ===i) {
         tempItemp = {
           type: "line",
@@ -180,7 +181,15 @@ const MyResponsiveLine = () => {
                 </button>
             </div>
             <div className="w-[900px] h-[600px] p-2">
-             <AgChartsReact options={options} />
+             {/* <AgChartsReact options={options} /> */}
+             <XYPlot height={600} width={700}>
+              {data.map((item, index)=> (
+               <LineSeries key={index} data={item} opacity={0.5}
+               stroke="#12939a" />
+              ))}
+             
+             </XYPlot>
+
             </div>
             <div></div>
         </div>

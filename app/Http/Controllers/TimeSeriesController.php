@@ -44,29 +44,32 @@ class TimeSeriesController extends Controller
       
               $transformedData = [];
       
-              // Determine the maximum number of time points
-              $maxTimePoints = $measurements->max(function ($measurement) {
-                  return count($measurement['y']);
-              });
-      
-      
-              // Initialize structure for each time point
-              for ($i = 0; $i < $maxTimePoints; $i++) {
-                  $transformedData[$i] = ['time' => $i];
-              }
-      
               // Populate the data for each time point from each measurement
               foreach ($measurements as $measurement) {
-                  if($measurement['status'] != 'unmarked') {
-                      $lastIndex++;
-                  }
+                $lastIndex++;
+                //   if($measurement['status'] != 'unmarked') {
+                //       $lastIndex++;
+                //   }
+                  $measurementData = []; 
                   foreach ($measurement['y'] as $index => $value) {
-                      // Assuming 'x' represents a unique identifier for each measurement and is a string
-                      $transformedData[$index][$measurement['x']] = $value;
+                    // This will store the current measurement's data points
+                    // Assuming 'x' represents a unique identifier for each measurement and is a string
+                      $measurementData[]= (object) [
+                        'x' => $index, // Assuming $index represents the time point
+                        'y' => $value, // The value at the time point
+                    ];
+
                   }
+                  array_push($transformedData, $measurementData);
+                
+
               }
-              // Return the data as JSON
               return response()->json(['data' => $transformedData, 'lastMarkedIndex' => $lastIndex]);
+
+
+
+
+              // Return the data as JSON
 
 
     }
