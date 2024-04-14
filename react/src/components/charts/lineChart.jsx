@@ -26,34 +26,9 @@ const MyResponsiveLine = () => {
 
 
   const moveToNext = () => {
-    setLastMarkedItem( prev=> prev+1)
     let array = []
-    let tempItemp = {}
     for(let i=0; i<=5000; i++) {
-      if(lastMarkedItem ===i) {
-        tempItemp = {
-          type: "line",
-          xKey: "time",
-          yKey: i.toString(),
-          yName: i.toString(),
-          stroke: "orange",
-          strokeWidth: 1,
-          marker: {
-            enabled: false,
-          },
-        }
-        // array.push({
-        //   type: "line",
-        //   xKey: "time",
-        //   yKey: i.toString(),
-        //   yName: i.toString(),
-        //   stroke: "orange",
-        //   strokeWidth: 10,
-        //   marker: {
-        //     enabled: true,
-        //   },
-        // })
-      } else {
+     if(i%10 === 0){
         array.push({
           type: "line",
           xKey: "time",
@@ -72,8 +47,31 @@ const MyResponsiveLine = () => {
       }
 
     }
-    array.push(tempItemp)
-    setOptions(prev=> prev.series = array);
+
+    array.push( {
+      type: "line",
+      xKey: "time",
+      yKey: (lastMarkedItem+1).toString(),
+      yName: (lastMarkedItem+1).toString(),
+      stroke: "orange",
+      strokeWidth: 2,
+      marker: {
+        enabled: false,
+      },
+    })
+
+    let newOptions = {
+      title: {
+        text: "Annual Fuel Expenditure",
+      },
+      legend : {
+        enabled: false,
+      },
+      data: data,
+      series: array,
+    }
+    setLastMarkedItem( prev=> prev+1)
+    setOptions(newOptions);
 
   }
 
@@ -81,39 +79,17 @@ const MyResponsiveLine = () => {
 
   const formatSeriesData = (count, lastMarkedIndex,graphData) => {
     let array = []
-    let tempItemp = {}
+    
     for(let i=0; i<=count; i++) {
-      if(lastMarkedIndex ===i) {
-        tempItemp = {
-          type: "line",
-          xKey: "time",
-          yKey: i.toString(),
-          yName: i.toString(),
-          stroke: "orange",
-          strokeWidth: 1,
-          marker: {
-            enabled: false,
-          },
-        }
-        // array.push({
-        //   type: "line",
-        //   xKey: "time",
-        //   yKey: i.toString(),
-        //   yName: i.toString(),
-        //   stroke: "orange",
-        //   strokeWidth: 10,
-        //   marker: {
-        //     enabled: true,
-        //   },
-        // })
-      } else {
+ 
+       if(i%10 === 0){
         array.push({
           type: "line",
           xKey: "time",
           yKey: i.toString(),
           yName: i.toString(),
-          strokeWidth: .5,
-          strokeOpacity: .2,
+          strokeWidth: 1,
+          strokeOpacity: .4,
           stroke: "#808080",
           marker: {
             enabled: false,
@@ -125,8 +101,18 @@ const MyResponsiveLine = () => {
       }
 
     }
-    array.push(tempItemp)
-    console.log('setSeriesData', array)
+    array.push( {
+      type: "line",
+      xKey: "time",
+      yKey: lastMarkedIndex.toString(),
+      yName: lastMarkedIndex.toString(),
+      stroke: "orange",
+      strokeWidth: 2,
+      marker: {
+        enabled: false,
+      },
+    })
+    console.log('setSeriesData', graphData)
     setSeriesData(array)
     let newOptions = {
     title: {
@@ -181,14 +167,16 @@ const MyResponsiveLine = () => {
                 </button>
             </div>
             <div className="w-[900px] h-[600px] p-2">
-             {/* <AgChartsReact options={options} /> */}
-             <XYPlot height={600} width={700}>
-              {data.map((item, index)=> (
-               <LineSeries key={index} data={item} opacity={0.5}
-               stroke="#12939a" />
-              ))}
+             <AgChartsReact options={options} />
+             {/* <XYPlot height={600} width={700}> */}
+              {/* {data.map((item, index)=> (
+                  index%50 === 0 ?<LineSeries curve={null} key={index} data={item} opacity={.1}
+                  stroke="#B2BEB5" strokeStyle="solid" />: null
+              ))} */}
+              {/* <LineSeries key={lastMarkedItem} data={data[lastMarkedItem]} opacity={1}
+                  stroke="#FF0000" strokeStyle="solid"  strokeWidth="5px" />
              
-             </XYPlot>
+             </XYPlot> */}
 
             </div>
             <div></div>
