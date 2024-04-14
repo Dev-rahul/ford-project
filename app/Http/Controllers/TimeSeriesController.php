@@ -72,9 +72,29 @@ class TimeSeriesController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Request $request)
     {
-        //
+        $request->validate([
+            '_id' => 'required|string', // Validate to ensure the _id is provided
+            'user_1' => 'required|string' // Ensure a new value for user_1 is provided
+        ]);
+
+        // Fetch the document by _id
+        $timeSeries = TimeSeries::where('_id', $request->_id)->first();
+
+        if ($timeSeries) {
+            // Update the user_1 field with the new value
+            $timeSeries->user_1 = $request->user_1;
+            $timeSeries->save(); // Save the changes to the database
+
+            return response()->json([
+                'message' => 'Time Series updated successfully',
+                'timeSeries' => $timeSeries
+            ], 200);
+        }
+
+        // If the document is not found, return an error response
+        return response()->json(['message' => 'Time Series not found'], 404);
     }
 
     /**
