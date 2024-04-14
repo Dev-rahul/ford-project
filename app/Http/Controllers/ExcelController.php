@@ -207,4 +207,10 @@ class ExcelController extends Controller
         // Return the data as JSON
         return response()->json(['data' => $transformedData, 'lastMarkedIndex' => $lastIndex]);
     }
+
+    public function getAllData()
+    {
+        $excels = Excel::get();
+        return response()->json(['data' => $excels]);
+    }
 }
