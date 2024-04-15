@@ -38,10 +38,12 @@ class TimeSeriesController extends Controller
     public function show(string $id)
     {
 
-        $measurements = TimeSeries::where('excel_id', $id)->get();
+        $measurements = TimeSeries::where('excel_id', $id)->orderBy('x')->get();
         $lastIndex = 0;
+        $unmarked = '' ;
 
         $transformedData = [];
+        $idArray = [];
 
         // Determine the maximum number of time points
         $maxTimePoints = $measurements->max(function ($measurement) {
@@ -55,17 +57,19 @@ class TimeSeriesController extends Controller
         }
 
         // Populate the data for each time point from each measurement
-        foreach ($measurements as $measurement) {
+        foreach ($measurements as  $currentindex => $measurement) {
             if($measurement['status'] != 'unmarked') {
-                $lastIndex++;
+                $lastIndex = $currentindex;
+                $unmarked = $measurement['_id'];
             }
+            $idArray[] = $measurement["_id"];
             foreach ($measurement['y'] as $index => $value) {
                 // Assuming 'x' represents a unique identifier for each measurement and is a string
                 $transformedData[$index][$measurement['x']] = $value;
             }
         }
         // Return the data as JSON
-        return response()->json(['data' => $transformedData, 'lastMarkedIndex' => $lastIndex]);
+        return response()->json(['data' => $transformedData, 'lastMarkedIndex' => $lastIndex, 'idArray' => $idArray, 'unmarked' => $unmarked]);
 
     }
 
@@ -76,7 +80,7 @@ class TimeSeriesController extends Controller
     {
         $request->validate([
             '_id' => 'required|string', // Validate to ensure the _id is provided
-            'user_1' => 'required|string' // Ensure a new value for user_1 is provided
+            'label' => 'required|integer' // Ensure a new value for user_1 is provided
         ]);
 
         // Fetch the document by _id
@@ -84,7 +88,8 @@ class TimeSeriesController extends Controller
 
         if ($timeSeries) {
             // Update the user_1 field with the new value
-            $timeSeries->user_1 = $request->user_1;
+            $timeSeries->status = 'marked';
+            $timeSeries->user0 = $request->label;
             $timeSeries->save(); // Save the changes to the database
 
             return response()->json([

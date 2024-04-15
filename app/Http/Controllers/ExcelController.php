@@ -101,6 +101,9 @@ class ExcelController extends Controller
                     $timeSeriesData->x = $index;
                     $timeSeriesData->y = $data;
                     $timeSeriesData->status = 'unmarked';
+                    $timeSeriesData->user0 = null;
+                    $timeSeriesData->user1 = null;
+                    $timeSeriesData->user2 = null;
                     $timeSeriesData->excel_id = $excelData->id;
                     $models[] = $timeSeriesData->toArray(); // Convert model instance to array
                 }

@@ -8,6 +8,7 @@ import Home from 'pages/home';
 import ForgotPassword from 'pages/forgot-password';
 import PasswordReset from 'pages/password-reset';
 import NotFoundPage from 'pages/404';
+import Download from 'pages/download';
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
         <Route path="/password-reset/:token" element={<PasswordReset />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/manage" element={<Manage />} />
+        <Route path="/download" element={<Download />} />
         <Route path="*" element={<NotFoundPage/>}
         />
       </Routes>

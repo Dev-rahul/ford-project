@@ -16,7 +16,7 @@ use App\Http\Controllers\TimeSeriesController;
 |
 */
 
-Route::middleware(['auth:sanctum'])->post('/udpate_label', [TimeSeriesController::class, 'edit']);
+Route::middleware(['auth:sanctum'])->post('/update_label', [TimeSeriesController::class, 'edit']);
 
 Route::middleware(['auth:sanctum'])->get('/getExcelData', [ExcelController::class, 'getAllData']);
 

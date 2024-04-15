@@ -33,7 +33,12 @@ const Navigation = ({ user }) => {
               <CustomNavLink
                 to="/manage"
               >
-                Manage
+                Upload
+              </CustomNavLink>
+              <CustomNavLink
+                to="/download"
+              >
+                Download
               </CustomNavLink>
             </div>
           </div>
