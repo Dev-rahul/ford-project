@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Rap2hpoutre\FastExcel\FastExcel;
 use App\Models\TimeSeries;
 use App\Models\Excel;
@@ -66,6 +67,40 @@ class ExcelController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function export(Request $request) {
+        $request->validate([
+            'file' => 'required|string', // Validate to ensure the _id is provided
+        ]);
+
+        $measurements = TimeSeries::where('excel_id', $request->file)->orderBy('x')->get();
+
+
+        function usersGenerator() {
+            foreach (TimeSeries::cursor() as $excel) {
+                yield $excel;
+            }
+        }
+        
+        // Export consumes only a few MB, even with 10M+ rows.
+        
+        // Export data to Excel file
+        $filePath = storage_path('app/public/example.xlsx');
+        //(new FastExcel($measurements))->export($filePath);
+        (new FastExcel(usersGenerator()))->export( $filePath);
+    
+        // Read the file content
+        $fileContent = file_get_contents($filePath);
+    
+        // Set the appropriate headers
+        $headers = [
+            'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            'Content-Disposition' => 'attachment; filename="example.xlsx"',
+        ];
+    
+        // Return the file content with headers
+        return response($fileContent, 200, $headers);
     }
 
     public function upload(Request $request)

@@ -14,6 +14,8 @@ const MyResponsiveLine = () => {
     const [lastMarkedItem, setLastMarkedItem] = useState(0);
     const [fileList, setFileList] = useState([]);
     const [idArray, setIdArray] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
+    const [contentLoaded, setContentLoaded] = useState(false)
 
     const [age, setAge] = React.useState("");
     const [selectedFile, setSelectedFile] = useState(null);
@@ -49,17 +51,24 @@ const MyResponsiveLine = () => {
 
     const fetchData = async () => {
         try {
+            setIsLoading(true)
+            setContentLoaded(false)
             const response = await axios.get(
                 "/api/getTimeSeriesData/" + selectedFile
             );
             let graphData = response.data.data;
             console.log("data", graphData);
             setData(graphData);
-            setIdArray(response.data.idArray);
             setLastMarkedItem(response.data.lastMarkedIndex);
             formatSeriesData(5000, response.data.lastMarkedIndex, graphData);
+            setIdArray(response.data.idArray);
+
         } catch (error) {
             console.error("Error uploading file:", error);
+            setIsLoading(false)
+            setContentLoaded(false)
+
+
         }
     };
 
@@ -201,6 +210,9 @@ const MyResponsiveLine = () => {
             series: array,
         };
         setOptions(newOptions);
+        setIsLoading(false)
+        setContentLoaded(true)
+
     };
 
     const [options, setOptions] = useState({
@@ -247,15 +259,20 @@ const MyResponsiveLine = () => {
                         </Select>
                     </FormControl>
                 </Box>
+                <div className="flex h-full w-full self-center item-center">
                 <Button
+                disableElevation
                     onClick={fetchData}
                     disabled={!selectedFile}
-                    variant="contained"
+                    variant="outlined"
+                   
                 >
                     Fetch Data
                 </Button>
+                </div>
+      
             </div>
-            <div className="flex justify-between  m-2 px-4">
+            {contentLoaded ?   <div className="flex justify-between  m-2 px-4">
               <div className="flex flex-row  gap-2">
               <button
                     onClick={() => moveToNext("1")}
@@ -290,8 +307,18 @@ const MyResponsiveLine = () => {
                 >
                     Undo
                 </button>
-            </div>
+            </div>: null}
+         
             <div >
+            {isLoading ? <div className="flex justify-center items-center  w-full h-[600px]">
+                <div
+    className="inline-block h-16 w-16 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"
+    role="status">
+    <span
+      className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]"
+    >Loading...</span>
+  </div>
+            </div> : null}
               {idArray.length> 0 ? <AgChartsReact options={options} /> : null}
                 
                 {/* <XYPlot height={600} width={700}> */}

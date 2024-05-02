@@ -34,8 +34,20 @@ const Download = () => {
 
     const handleFileDownload = async () => {
         try {
-            const response = await axios.get("/api/export");
+            const response = await axios.post("/api/export",{responseType: "blob", file: selectedFile});
             console.log("File uploaded successfully:", response.data);
+            const href = URL.createObjectURL(response.data);
+            var binaryData = [];
+binaryData.push(data);
+            const url = window.URL.createObjectURL(new Blob(binaryData, {type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"})); // you can mention a type if you wish
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("download", "dummy.docx"); //this is the name with which the file will be downloaded
+        link.click();
+        // no need to append link as child to body.
+        setTimeout(() => window.URL.revokeObjectURL(url), 0); // this is important too, otherwise we will be unnecessarily spiking memory!
+        // setDownload(false);
+
         } catch (error) {
             console.error("Error uploading file:", error);
         }
