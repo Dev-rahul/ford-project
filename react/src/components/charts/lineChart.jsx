@@ -59,8 +59,8 @@ const MyResponsiveLine = () => {
             let graphData = response.data.data;
             console.log("data", graphData);
             setData(graphData);
-            setLastMarkedItem(response.data.lastMarkedIndex);
-            formatSeriesData(5000, response.data.lastMarkedIndex, graphData);
+            setLastMarkedItem(response.data.lastMarkedIndex + 1);
+            formatSeriesData(5000, response.data.lastMarkedIndex + 1, graphData);
             setIdArray(response.data.idArray);
 
         } catch (error) {
