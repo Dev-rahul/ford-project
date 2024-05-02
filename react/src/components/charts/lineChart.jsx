@@ -276,25 +276,25 @@ const MyResponsiveLine = () => {
               <div className="flex flex-row  gap-2">
               <button
                     onClick={() => moveToNext("1")}
-                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                    class="bg-[#00095B] hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                 >
                     Normal
                 </button>
                 <button
                     onClick={() => moveToNext("2")}
-                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                    class="bg-[#00095B] hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                 >
                     TA
                 </button>
                 <button
                     onClick={() => moveToNext("3")}
-                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                    class="bg-[#00095B] hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                 >
                     ANC
                 </button>
                 <button
                     onClick={() => moveToNext("-1")}
-                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                    class="bg-[#00095B] hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                 >
                     REHIT
                 </button>
@@ -303,7 +303,7 @@ const MyResponsiveLine = () => {
 
                <button
                     onClick={() => UndoMarking("-1")}
-                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                    class="bg-[#00095B] hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                 >
                     Undo
                 </button>
